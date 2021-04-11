@@ -27,10 +27,17 @@ def start_survey():
 def get_question(num):
     """Get Question"""
 
-    # error handling num may go above 4
+    # error handling num may go above 4 (buggy?) 
     if (len(responses) == len(satisfaction_survey.questions)):
         # redirect to thank you page
         return redirect('/thanks')
+
+    # protect question so that question is not skipped; user may want to go to a different question than in order 
+    if (len(responses) != num):
+        # flash message (base.html)
+        flash("Sorry you are trying to access an invalid question")
+        # redirect to current question 
+        return redirect(f'/questions/{len(responses)}')
 
     question = satisfaction_survey.questions[num]
     return render_template('questions.html', question_num=num, question=question)
